@@ -51,6 +51,8 @@ mlb11_data =
   read_excel(
     path = "./data/mlb11.xlsx")
     #range = "A1:D7"
+
+#write_csv(mlb11_data_subset, path = "./data/mlb1_subset")
 ```
 #read in SAS
 ```{r}
