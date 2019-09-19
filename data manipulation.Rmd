@@ -26,24 +26,6 @@ pups_data = read_csv(file = "./data/FAS_pups.csv")
 pups_data = janitor::clean_names(pups_data)
 ```
 
-#play with column parsing
-
-```{r}
-litters_data = read_csv(
-  file = "./data/FAS_litters.csv",
-    col_types = cols(
-    Group = col_character(),
-    `Litter Number` = col_character(), #having ` since there is space in the column name
-    `GD0 weight` = col_double(),
-    `GD18 weight` = col_double(),
-    `GD of Birth` = col_integer(),
-    `Pups born alive` = col_integer(),
-    `Pups dead @ birth` = col_integer(),
-    `Pups survive` = col_integer()
- )
-)
-```
-
 #read in an excel file
 
 ```{r}
@@ -58,5 +40,38 @@ mlb11_data =
 ```{r}
 pulse_data = haven::read_sas("./data/public_pulse_data.sas7bdat")
 
+```
+
+##Selecting!!
+
+```{r}
+select(litters_data, group, litter_number) #first item:where the data selected from, and following with the column you want to selected
+
+select(litters_data, litter_number, gd0_weight, starts_with("pups")) #start_with phase helps us to select columns which the name starting with pups
+
+select(litters_data, litter_number, group, everything()) #take the litter_number and group first, and then anything else
+
+select(litters_data, -group) #-group helps to exclude the column you dont want
+
+select(litters_data, litter_number, gd0_weight:pups_born_alive) #includes every column starting with gd0_weight upto pup_born_alive
+
+select(litters_data, GROUP = group, litter_number) #rename the "group" to "GROUP"
+
+rename(litters_data, GROUP = group) #only rename the column, not doing the selection
+```
+
+## Filtering!!
+```{r}
+filter(litters_data, group == "Mod8") #double equal sign: to chech whether the group is equal to con7/Mod 8 
+
+filter(litters_data, gd_of_birth == 20)
+
+filter(litters_data, gd_of_birth < 20)
+
+filter(litters_data, gd_of_birth >=20)
+
+filter(litters_data, pups_born_alive <6)
+
+filter(litters_data, pups_born_alive <6, group == "Con7") #filter the dataset even more
 ```
 
