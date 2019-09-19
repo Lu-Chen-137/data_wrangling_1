@@ -87,7 +87,7 @@ filter(litters_data, gd0_weight + gd18_weight <70)
 drop_na(litters_data, gd0_weight)
 ```
 
-##Mutation
+## Mutation
 
 ```{r}
 mutate(litters_data, 
@@ -96,7 +96,7 @@ mutate(litters_data,
 #adding a column named wt_gain which mutate the gd18_weight and gd0_weight, and showing at the end of table (last column); str_to_lower: making element in "group" column lower case;
 
 ```
-##Arrange
+## Arrange
 
 ```{r}
 arrange(litters_data, pups_born_alive) #putting the dataset in order according to the number in pups_born_alive
@@ -107,5 +107,18 @@ arrange(litters_data, pups_born_alive, gd0_weight) #arrange the dataset based on
 
 
 
+```
+
+## pipe...
+```{r}
+litters_data=
+  read_csv("./data/FAS_litters.csv") %>% #import the data and start to pipe
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight, group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight)
+  
+  
 ```
 
