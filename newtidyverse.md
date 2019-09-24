@@ -93,3 +93,37 @@ lotr_data =
   ) %>% 
   select(movie, race, sex, words)
 ```
+
+### join datasets
+
+``` r
+pup_data = 
+  read_csv("./data/FAS_pups.csv", col_types = "ciiiii") %>%
+  janitor::clean_names() %>%
+  mutate(sex = recode(sex, `1` = "male", `2` = "female")) #recoding the numerical variable to categorical variable
+
+litter_data = 
+  read_csv("./data/FAS_litters.csv", col_types = "ccddiiii") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group))
+```
+
+try to join these datasets!!
+
+``` r
+fas_data = 
+  left_join(pup_data, litter_data, by = "litter_number") #by: the joining variable;the left_join statement is clear, if you do not specify which variable you want to join by, it will auto-join with the variable the system picked;
+
+  full_join(pup_data, litter_data, by = "litter_number") %>% filter(is.na(sex))
+```
+
+    ## # A tibble: 2 x 13
+    ##   litter_number sex   pd_ears pd_eyes pd_pivot pd_walk group gd0_weight
+    ##   <chr>         <chr>   <int>   <int>    <int>   <int> <chr>      <dbl>
+    ## 1 #112          <NA>       NA      NA       NA      NA low7        23.9
+    ## 2 #7/82-3-2     <NA>       NA      NA       NA      NA mod8        26.9
+    ## # … with 5 more variables: gd18_weight <dbl>, gd_of_birth <int>,
+    ## #   pups_born_alive <int>, pups_dead_birth <int>, wt_gain <dbl>
