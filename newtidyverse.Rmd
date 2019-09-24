@@ -1,0 +1,41 @@
+---
+title: "new_tidyr_version"
+author: "Lu Chen"
+date: "09/24/2019"
+output: github_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+#wide to long
+```{r}
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names()
+  pivot_longer(
+  pulse_data,
+  bdi_score_bl:bdi_score_12m,
+  names_to = "visit", #creating a new column containing bdi data
+  names_prefix = "bdi_score_",
+  values_to = "bdi" #
+) %>% 
+  mutate(
+    visit = recode(visit, "bl" = "00m") #change/set the value of bl in visit column into "00m"
+  )
+```
+
+#seperate in litters
+```{r}
+litters_data = 
+  read.csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(col = group, into = c("dose", "day_of_tx"),3) #seperate the old column "group" into two new columns dose and day_of_tx;
+
+```
+
+
