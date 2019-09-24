@@ -46,3 +46,24 @@ litters_data =
   janitor::clean_names() %>% 
   separate(col = group, into = c("dose", "day_of_tx"),3) #seperate the old column "group" into two new columns dose and day_of_tx;
 ```
+
+``` r
+analysis_result = tibble(
+  group = c("treatment", "treatment", "placebo", "placebo"),
+  time = c("pre", "post", "pre", "post"),
+  mean = c(4, 8, 3.5, 4)
+)
+
+pivot_wider(
+  #pivot_longer: transfer long format to wide format
+  analysis_result,
+  names_from = time,
+  values_from = mean
+)
+```
+
+    ## # A tibble: 2 x 3
+    ##   group       pre  post
+    ##   <chr>     <dbl> <dbl>
+    ## 1 treatment   4       8
+    ## 2 placebo     3.5     4
